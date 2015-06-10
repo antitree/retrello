@@ -1,3 +1,0 @@
-[submodule "trello"]
-	path = trello
-	url = https://github.com/sarumont/py-trello.git

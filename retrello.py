@@ -12,7 +12,7 @@ import json
 # frequency, board, list, name, description, estimation, due-date, assigned
 
 # check what cards need to be repeated
-DEBUG = True
+DEBUG = False
 
 def main():
     # Check SQLite DB for records
@@ -35,8 +35,6 @@ def main():
         month = day * 30
         for record in records:
             card = set_card(record)
-            #if card["last"] is None:
-            #   add_card(card, board)
             if card["freq"] == "Daily" and card["last"] < (current - day):
                 card["due"] = datetime.datetime.now() + datetime.timedelta(days=1)
                 add_card(card, board)
