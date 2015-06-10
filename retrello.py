@@ -137,7 +137,10 @@ def db_setup():
 
 
 def trello_auth():
-    f = open("CREDS", 'r')
+    try:
+        f = open("CREDS", 'r')
+    except:
+        print("Missing CREDS file")
     creds = json.load(f)
     client = TrelloClient(
         api_key=creds["api_key"],
