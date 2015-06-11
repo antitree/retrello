@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from trello import TrelloClient
 from trello import ResourceUnavailable
 import sqlite3
