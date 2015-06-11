@@ -31,7 +31,7 @@ def main():
         # if last_time < frequency then make new card
         current = time.time()
         #print(current)
-        day = 8640000
+        day = 86400
         week = day * 7
         month = day * 30
         for record in records:
