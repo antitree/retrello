@@ -30,7 +30,7 @@ def main():
         conn.close()
         # if last_time < frequency then make new card
         current = time.time()
-        #print(current)
+	print("Current time: %s" % current)
         day = 86400
         week = day * 7
         month = day * 30
