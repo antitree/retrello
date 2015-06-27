@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from trello import TrelloClient
 from trello import ResourceUnavailable
 import sqlite3
@@ -29,8 +30,8 @@ def main():
         conn.close()
         # if last_time < frequency then make new card
         current = time.time()
-        #print(current)
-        day = 8640000
+	print("Current time: %s" % current)
+        day = 86400
         week = day * 7
         month = day * 30
         for record in records:
