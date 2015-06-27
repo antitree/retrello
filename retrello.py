@@ -12,7 +12,7 @@ import json
 # frequency, board, list, name, description, estimation, due-date, assigned
 
 # check what cards need to be repeated
-DEBUG = False
+DEBUG = True
 
 def main():
     # Check SQLite DB for records
@@ -63,6 +63,7 @@ def set_card(record):
     card["last"] = record[4]
     card["plus"] = record[5]
     card["due"] = None
+    card["assignee"] = record[6]
     return card
 
 def add_card(card, board):
@@ -70,6 +71,8 @@ def add_card(card, board):
     try:
         tboard = next(x for x in client.list_boards() if x.name == board)
         print(tboard.id)
+        #client.get_member("547f27182168478ca0f8680c")
+        #print("I think I got the memberid")
     except ResourceUnavailable as err:
         print(err)
         print("Sleeping")
@@ -91,10 +94,13 @@ def add_card(card, board):
         newdue = card["due"].strftime("%Y-%m-%d")
     else:
         newdue = "null"
-    print newdue
+    # print newdue # Debug
 
     try:
-        newcard = tlist.add_card(card["name"], desc=card["desc"],due=newdue)
+        newcard = tlist.add_card(
+            card["name"],
+            desc=card["desc"],
+            due=newdue)
     except ResourceUnavailable as err:
         print(err)
         print("Sleeping")
@@ -105,6 +111,8 @@ def add_card(card, board):
 
     try:
         newcard.comment(card["plus"])
+        if card["assignee"]:
+            newcard.assign(card["assignee"])
         if DEBUG:
             delete_card(newcard)
     except ResourceUnavailable as err:
