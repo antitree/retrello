@@ -13,7 +13,7 @@ import json
 # frequency, board, list, name, description, estimation, due-date, assigned
 
 # check what cards need to be repeated
-DEBUG = True
+DEBUG = False
 
 def main():
     # Check SQLite DB for records
