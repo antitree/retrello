@@ -25,7 +25,7 @@ def main():
     for b in boards:
         board = b[0]
         conn, cur = db_setup()
-        results = cur.execute('SELECT * FROM ' + board)
+        results = cur.execute('SELECT * FROM "' + board + '"')
         records = results.fetchall()
         conn.close()
         # if last_time < frequency then make new card
@@ -125,7 +125,7 @@ def delete_card(card):
 def update_last(card, board):
     conn, cur = db_setup()
     newtime = time.time()
-    sql = 'UPDATE ' + board + ' SET Last=? WHERE List=? AND Name=? AND Desc=?'
+    sql = 'UPDATE "' + board + '" SET Last=? WHERE List=? AND Name=? AND Desc=?'
     cur.execute(sql, (newtime, card["list"], card["name"], card["desc"]))
     conn.commit()
     conn.close()
