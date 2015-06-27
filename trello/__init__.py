@@ -944,9 +944,9 @@ class Card(object):
 
     def assign(self, member_id):
         self.client.fetch_json(
-            '/cards/' + self.id + '/members',
+            '/cards/' + self.id + '/idMembers',
             http_method='POST',
-            post_args={'value': member_id, })
+            post_args={'value': member_id})
 
     def comment(self, comment_text):
         """Add a comment to a card."""
