@@ -901,7 +901,7 @@ class Card(object):
 
     @property
     def due_date(self):
-        return dateparser.parse(self.due)
+        return dateparser.parse(self.due) if self.due else ''
 
     def set_name(self, new_name):
         """
