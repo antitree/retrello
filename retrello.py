@@ -13,7 +13,7 @@ import json
 # frequency, board, list, name, description, estimation, due-date, assigned
 
 # check what cards need to be repeated
-DEBUG = False
+DEBUG = True
 
 def main():
     # Check SQLite DB for records
@@ -92,6 +92,9 @@ def add_card(card, board):
             print('.'),
             time.sleep(1)
         return False
+    except Exception as err:
+        print(tlist)
+        print(err)
     if card["due"]:
         newdue = card["due"].strftime("%Y-%m-%d")
     else:
