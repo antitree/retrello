@@ -13,7 +13,8 @@ import json
 # frequency, board, list, name, description, estimation, due-date, assigned
 
 # check what cards need to be repeated
-DEBUG = True
+DEBUG = False
+FORCE = False
 
 def main():
     # Check SQLite DB for records
@@ -37,21 +38,26 @@ def main():
     month = day * 30
     for record in records:
         card = set_card(record)
-        if card["freq"] == "Daily" and card["last"] < (current - day):
-            card["due"] = datetime.datetime.now() + datetime.timedelta(days=1)
-            add_card(card, board)
-        elif card["freq"] == "Weekly" and card["last"] < (current - week):
-            card["due"] = datetime.datetime.now() + datetime.timedelta(days=7)
-            add_card(card, board)
-        elif card["freq"] == "Monthly" and card["last"] < (current - month):
-            card["due"] = datetime.datetime.now() + datetime.timedelta(days=30)
-            add_card(card, board)
-        elif DEBUG:
-            card["due"] = datetime.datetime.now() + datetime.timedelta(days=60)
-            add_card(card,board)
+        if not FORCE:
+            if card["freq"] == "Daily" and card["last"] < (current - day):
+                card["due"] = datetime.datetime.now() + datetime.timedelta(days=1)
+                add_card(card, board)
+            elif card["freq"] == "Weekly" and card["last"] < (current - week):
+                card["due"] = datetime.datetime.now() + datetime.timedelta(days=7)
+                add_card(card, board)
+            elif card["freq"] == "Monthly" and card["last"] < (current - month):
+                card["due"] = datetime.datetime.now() + datetime.timedelta(days=30)
+                add_card(card, board)
+            elif DEBUG:
+                card["due"] = datetime.datetime.now() + datetime.timedelta(days=60)
+                add_card(card,board)
+            else:
+                print("%s: Does not need adding" % card["name"])
         else:
-            print("%s: Does not need adding" % card["name"])
+            add_card(card, board)
+            print("Forcefull added card: %s" % card["name"])
     conn.close()
+
 
 def set_card(record):
     card = dict()
@@ -67,6 +73,7 @@ def set_card(record):
     card["due"] = None
     card["assignee"] = record[6]
     return card
+
 
 def add_card(card, board):
     client = trello_auth()
@@ -93,8 +100,8 @@ def add_card(card, board):
             time.sleep(1)
         return False
     except Exception as err:
-        print(tlist)
         print(err)
+        return False
     if card["due"]:
         newdue = card["due"].strftime("%Y-%m-%d")
     else:
@@ -137,17 +144,16 @@ def delete_card(card):
 def clear_done(done="Done"):
     # remove due dates for all cards in done list
     client = trello_auth()
-    #try:
-    if True:
+    try:
         tboard = next(x for x in client.list_boards())
         tlist = next(x for x in tboard.all_lists())
         cards = tlist.list_cards()
         for card in cards:
             card._set_remote_attribute("due", "null")
         print("Removed due dates from %s" % done)
-    #except Exception as err:
-    else:
-        print("balls")
+    except Exception as err:
+        print(err)
+
 
 def update_last(card, board):
     conn, cur = db_setup()
