@@ -52,7 +52,7 @@ def main():
                 card["due"] = datetime.datetime.now() + datetime.timedelta(days=60)
                 add_card(card,board)
             else:
-                print("%s: Does not need adding" % card["name"])
+                print("%s: Does not need adding (last updated %s days ago)" % ( card["name"], int((current - card["last"]) / day) ))
         else:
             add_card(card, board)
             print("Forcefull added card: %s" % card["name"])
