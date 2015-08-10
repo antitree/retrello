@@ -5,6 +5,7 @@ import sqlite3
 import time
 import datetime
 import json
+import sys
 
 
 ## STRUCT of card with plus builtin
@@ -145,14 +146,15 @@ def clear_done(done="Done"):
     # remove due dates for all cards in done list
     client = trello_auth()
     try:
-        tboard = next(x for x in client.list_boards())
-        tlist = next(x for x in tboard.all_lists())
+        tboard = next(x for x in client.list_boards() if x.name == "Hacking")
+        tlist = next(x for x in tboard.all_lists() if x.name == done)
         cards = tlist.list_cards()
         for card in cards:
             card._set_remote_attribute("due", "null")
         print("Removed due dates from %s" % done)
     except Exception as err:
         print(err)
+    sys.exit()
 
 
 def update_last(card, board):
